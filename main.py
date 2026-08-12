@@ -19,14 +19,19 @@ class Assignment:
         return f"[{self.type.upper()}] {self.subject.title()} - {self.title} | {self.score}/{self.max_score} | Due: {self.due_date}"
 
 class Homework(Assignment):
-    pass
+    def __init__(self,subject,title,score,max_score,due_date):
+        super().__init__(subject,title,score,max_score,due_date,"homework")
+    
 
 class Exam(Assignment):
-    pass
+    def __init__(self,subject,title,score,max_score,due_date):
+        super().__init__(subject,title,score,max_score,due_date,"exam")
 
 class GradeTracker:
     def __init__(self):
         pass
 
-homework=Assignment( "Maths","Targeter End Term 2 Exam",80,100, 20260816,"Homework")
-print(homework)
+#homework=Assignment( "Maths","Targeter End Term 2 Exam",80,100, 20260816,"Homework")
+#print(homework)
+hw=Homework("English","End Term 3 Exam",75,100,20260831)
+print(hw)
