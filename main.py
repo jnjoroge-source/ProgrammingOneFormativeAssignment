@@ -7,6 +7,48 @@
 #5) Show summary
 #0) Exit
 
+def menu():
+        Menu={1:"add_homework",2:"add_exam",3:"list_assignments",4:"filter_assignments",5:"show_summary",0:"Exit"}
+        print(Menu)
+        while True:
+             choice= input("Enter your choice on the menu provided:")
+             try:
+                  valid_choice=int(choice)
+                  if valid_choice==1:
+                       execute=add_homework()
+                  elif valid_choice==2:
+                       execute=add_exam()
+                  elif valid_choice==3:
+                       execute=list_assignments()
+                  elif valid_choice==4:
+                       execute=filter_assignments()
+                  elif valid_choice==5:
+                       execute=show_summary()
+                  else:
+                       print("Program execution ended")
+                       break
+             except:
+                  print(" Please try again.Enter a valid integer!")
+             print("Your response has been recorded")
+
+def add_homework():
+        subject=input("Enter the subject:")
+        title=input("Enter the assignment title:")
+        score=input("Enter your score:")
+        max_score=input("Enter the maximum score:")
+        due_date=input("Enter the due date in the format:YYYY-MM-DD")
+        homework=Homework(subject,title,score,max_score,due_date)
+        tracker.add_assignments(homework)
+        
+def add_exam():
+        subject=input("Enter the subject:")
+        title=input("Enter the assignment title:")
+        score=input("Enter your score:")
+        max_score=input("Enter the maximum score:")
+        due_date=input("Enter the due date in the format:YYYY-MM-DD")
+        exam=Exam(subject,title,score,max_score,due_date)
+        tracker.add_assignments(exam)
+
 class Assignment:
     def __init__(self, subject, title, score, max_score, due_date, type):
         self.subject=subject.lower().strip()
@@ -29,9 +71,22 @@ class Exam(Assignment):
 
 class GradeTracker:
     def __init__(self):
+        self.assignments=[]
+
+    def add_assignments(self,assignment):
+         self.assignments.append(assignment)
+
+
+    def list_assignments(self):
         pass
 
-#homework=Assignment( "Maths","Targeter End Term 2 Exam",80,100, 20260816,"Homework")
-#print(homework)
-hw=Homework("English","End Term 3 Exam",75,100,20260831)
-print(hw)
+    def filter_assignments(self):
+        pass
+    def show_summary(self):
+        pass
+
+
+
+tracker=GradeTracker()
+
+menu()
