@@ -19,17 +19,16 @@ def menu():
                   elif valid_choice==2:
                        execute=add_exam()
                   elif valid_choice==3:
-                       execute=list_assignments()
+                       execute=tracker.list_assignments()
                   elif valid_choice==4:
-                       execute=filter_assignments()
+                       execute=tracker.filter_assignments()
                   elif valid_choice==5:
-                       execute=show_summary()
+                       execute=tracker.show_summary()
                   else:
                        print("Program execution ended")
                        break
              except:
                   print(" Please try again.Enter a valid integer!")
-             print("Your response has been recorded")
 
 def add_homework():
         subject=input("Enter the subject:")
@@ -49,6 +48,7 @@ def add_exam():
         exam=Exam(subject,title,score,max_score,due_date)
         tracker.add_assignments(exam)
 
+
 class Assignment:
     def __init__(self, subject, title, score, max_score, due_date, type):
         self.subject=subject.lower().strip()
@@ -57,8 +57,10 @@ class Assignment:
         self.max_score=float(max_score)
         self.due_date=due_date
         self.type=type
+
     def __str__(self):
         return f"[{self.type.upper()}] {self.subject.title()} - {self.title} | {self.score}/{self.max_score} | Due: {self.due_date}"
+
 
 class Homework(Assignment):
     def __init__(self,subject,title,score,max_score,due_date):
@@ -68,6 +70,7 @@ class Homework(Assignment):
 class Exam(Assignment):
     def __init__(self,subject,title,score,max_score,due_date):
         super().__init__(subject,title,score,max_score,due_date,"exam")
+
 
 class GradeTracker:
     def __init__(self):
@@ -117,18 +120,54 @@ class GradeTracker:
                       print("Please enter a valid subject")
               
             elif valid_option==3:
-                 pass
-
-
-                 
+                 required_month=input("Enter your preferred month:")
+                 try:
+                      valid_month=int(required_month)
+                      for assignment in self.assignments:
+                           month=assignment.due_date[4:6]
+                           int_month=int(month)
+                           if int_month==valid_month:
+                                print(assignment)
+                 except:
+                      print("Enter a valid month")
+                       
         except:
-            print("Enter a valid option ")
+             print("Enter a valid option ")
 
     def show_summary(self):
-        pass
+         if len(self.assignments)>0:
+              total_marks_scored=0
+              maximum_marks=0
+              highest=self.assignments[0]
+              lowest=self.assignments[0]
+              subject_scores={}
+              for assignment in self.assignments:
+                   total_marks_scored=total_marks_scored+assignment.score
+                   maximum_marks=maximum_marks+assignment.max_score
+                   average_score=total_marks_scored/maximum_marks*100
 
+                   pct = assignment.score / assignment.max_score
+                   old_score, old_max = subject_scores.get(assignment.subject, (0, 0))
+                   subject_scores[assignment.subject] = (old_score + assignment.score, old_max + assignment.max_score)
 
+                   if pct > (highest.score / highest.max_score):
+                    highest = assignment
+                   if pct < (lowest.score / lowest.max_score):
+                    lowest = assignment
+              average_score = total_marks_scored / maximum_marks * 100
+              print(f"Overall Average: {average_score:.2f}%")
+
+              print("Per-Subject Averages:")
+              for subject, totals in subject_scores.items():
+                  subject_avg = totals[0] / totals[1] * 100
+                  print(f"  {subject.title()}: {subject_avg:.2f}%")
+
+              print(f"Highest: {highest}")
+              print(f"Lowest: {lowest}")
+              
+
+         else:
+              print("No assignment was given. Please input your assignment to view the summary of the results")
 
 tracker=GradeTracker()
-
 menu()
