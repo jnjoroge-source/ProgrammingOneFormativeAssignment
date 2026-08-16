@@ -78,10 +78,52 @@ class GradeTracker:
 
 
     def list_assignments(self):
-        pass
+        len_list=len(self.assignments)
+        if len_list>0:
+             for assignment in self.assignments:
+                  print(assignment)
+        else:
+             print("No assignments recorded. Select from the menu to add them")
 
     def filter_assignments(self):
-        pass
+        options={1:"by type",2:"by subject",3:"by date"}
+        print(options)
+        option=input("Enter your filter criteria from the options provided:")
+        
+        try:
+            valid_option=int(option)
+            if valid_option ==1:
+              required_type=input("Please enter 1 for homeworks or 2 for exams:")
+              try:
+                   valid_type=int(required_type)
+                   if valid_type==1:
+                        for assignment in self.assignments:
+                             if assignment.type=="homework":
+                                  print(assignment)
+                   if valid_type==2:
+                        for assignment in self.assignments:
+                             if assignment.type=="exam":
+                                  print(assignment)
+              except:
+                   print("Please enter a valid option")
+            elif valid_option==2:
+                 required_subject=input("Please enter your preferred subject:")
+                 try:
+                      valid_subject=str(required_subject)
+                      for assignment in self.assignments:
+                           if assignment.subject==valid_subject:
+                                print(assignment)
+                 except:
+                      print("Please enter a valid subject")
+              
+            elif valid_option==3:
+                 pass
+
+
+                 
+        except:
+            print("Enter a valid option ")
+
     def show_summary(self):
         pass
 
