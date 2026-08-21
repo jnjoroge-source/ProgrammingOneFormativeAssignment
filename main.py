@@ -119,7 +119,7 @@ class GradeTracker:
             elif valid_option==2:
                  required_subject=input("Please enter your preferred subject:")
                  try:
-                      valid_subject=str(required_subject)
+                      valid_subject= required_subject.lower().strip()
                       for assignment in self.assignments:
                            if assignment.subject==valid_subject:
                                 print(assignment)
@@ -132,7 +132,7 @@ class GradeTracker:
                       if assignment.due_date.startswith(required_month):
                          print(assignment)
                       else:
-                        continue
+                       print("No matching assignments were found")
 
                        
         except ValueError:
