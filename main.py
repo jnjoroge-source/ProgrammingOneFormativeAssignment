@@ -7,9 +7,11 @@
 #5) Show summary
 #0) Exit
 
+# Displays the menu and handles user choices in a loop
 def menu():
         Menu={1:"add_homework",2:"add_exam",3:"list_assignments",4:"filter_assignments",5:"show_summary",0:"Exit"}
-        print(Menu)
+        for key,value in Menu.items():
+             print(f'{key} {value.replace('_'," ").title()}')
         while True:
              choice= input("Enter your choice on the menu provided:")
              try:
@@ -27,9 +29,10 @@ def menu():
                   else:
                        print("Program execution ended")
                        break
-             except:
+             except ValueError:
                   print(" Please try again.Enter a valid integer!")
 
+# Collects homework details from user and stores it via the tracker
 def add_homework():
         subject=input("Enter the subject:")
         title=input("Enter the assignment title:")
@@ -38,7 +41,8 @@ def add_homework():
         due_date=input("Enter the due date in the format:YYYY-MM-DD")
         homework=Homework(subject,title,score,max_score,due_date)
         tracker.add_assignments(homework)
-        
+
+# Collects exam details from user and stores it via the tracker       
 def add_exam():
         subject=input("Enter the subject:")
         title=input("Enter the assignment title:")
@@ -48,13 +52,14 @@ def add_exam():
         exam=Exam(subject,title,score,max_score,due_date)
         tracker.add_assignments(exam)
 
-
 class Assignment:
     def __init__(self, subject, title, score, max_score, due_date, type):
         self.subject=subject.lower().strip()
         self.title=title
         self.score=float(score)
         self.max_score=float(max_score)
+        if self.score>self.max_score:
+             raise ValueError("Score cannot exceed maximum score. Enter a valid score")
         self.due_date=due_date
         self.type=type
 
@@ -76,10 +81,11 @@ class GradeTracker:
     def __init__(self):
         self.assignments=[]
 
+    # Adds a new assignment to the tracker's list
     def add_assignments(self,assignment):
          self.assignments.append(assignment)
 
-
+    # Prints all recorded assignments, or a message if none exist
     def list_assignments(self):
         len_list=len(self.assignments)
         if len_list>0:
@@ -88,6 +94,7 @@ class GradeTracker:
         else:
              print("No assignments recorded. Select from the menu to add them")
 
+    # Filters assignments by type, subject, or month based on user choice
     def filter_assignments(self):
         options={1:"by type",2:"by subject",3:"by date"}
         print(options)
@@ -107,7 +114,7 @@ class GradeTracker:
                         for assignment in self.assignments:
                              if assignment.type=="exam":
                                   print(assignment)
-              except:
+              except ValueError:
                    print("Please enter a valid option")
             elif valid_option==2:
                  required_subject=input("Please enter your preferred subject:")
@@ -116,24 +123,22 @@ class GradeTracker:
                       for assignment in self.assignments:
                            if assignment.subject==valid_subject:
                                 print(assignment)
-                 except:
+                 except ValueError:
                       print("Please enter a valid subject")
               
             elif valid_option==3:
-                 required_month=input("Enter your preferred month:")
-                 try:
-                      valid_month=int(required_month)
-                      for assignment in self.assignments:
-                           month=assignment.due_date[4:6]
-                           int_month=int(month)
-                           if int_month==valid_month:
-                                print(assignment)
-                 except:
-                      print("Enter a valid month")
+                 required_month=input("Enter your preferred month in the format YYYY-MM:")
+                 for assignment in self.assignments:
+                      if assignment.due_date.startswith(required_month):
+                         print(assignment)
+                      else:
+                        continue
+
                        
-        except:
+        except ValueError:
              print("Enter a valid option ")
 
+    # Calculates and displays overall, per-subject, highest and lowest grades
     def show_summary(self):
          if len(self.assignments)>0:
               total_marks_scored=0
